@@ -1,8 +1,9 @@
 # 共定位，口径照贺奕捷 1-mk-gene-new.sh + 2-coloc.sh + 2-coloc_analysis_new.R：
-#   eQTL 一侧：该组合里这个基因的全部 nominal 结果（基因、SNP、到 TSS 的距离、P、beta）配队列 MAF，type="quant"，N=134；
+#   eQTL 一侧：该组合里这个基因的全部 nominal 结果（基因、SNP、到 TSS 的距离、P、beta）配队列 MAF，type="quant"，N=该脑区样本数（Supplementary Table 1，101–131）；
 #   GWAS 一侧：<编号>-coloc.tsv 的 P、b、se²，type="cc"；按 SNP 取交集，少于 10 个不跑；coloc.abf 用默认先验。
 # 和他的差别只在跑法：GWAS 表每份只读一次（他是每个基因读一次），结果应当一致，用没换 GWAS 的 3 种病核对。
 # 用法: Rscript s11_coloc.R <smr-sig-gene.txt> <eqtl目录> <输出目录> [核数]
+NREG <- list(FCTX = 127, TCTX = 119, OCTX = 129, HIPP = 122, PUTM = 129, THAL = 124, SNIG = 101, MEDU = 119, WHMT = 131, CRBL = 130)  # samples per region
 suppressMessages({library(coloc); library(data.table); library(parallel)})
 a <- commandArgs(trailingOnly = TRUE)
 sigf <- a[1]; eqdir <- a[2]; out <- a[3]; nc <- if (length(a) >= 4) as.integer(a[4]) else 8L
@@ -36,7 +37,7 @@ one_gwas <- function(g) {
       if (nrow(input) < 10) { r$note <- "Too few SNPs for coloc"; res[[length(res) + 1]] <- r; next }
       cr <- tryCatch({
         invisible(capture.output(x <- suppressWarnings(suppressMessages(
-          coloc.abf(dataset1 = list(snp = input$snps, pvalues = input$pvalue, beta = input$beta, MAF = input$maf, type = "quant", N = 134),
+          coloc.abf(dataset1 = list(snp = input$snps, pvalues = input$pvalue, beta = input$beta, MAF = input$maf, type = "quant", N = NREG[[sub("-.*", "", cx)]]),
                     dataset2 = list(snp = input$snps, pvalues = input$p, beta = input$b, varbeta = input$varbeta, type = "cc"))))))
         x
       }, error = function(e) conditionMessage(e))

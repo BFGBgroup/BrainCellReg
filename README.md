@@ -46,7 +46,7 @@ Scripts ending in `.slurm` are the job files used on our Slurm cluster. Paths in
 
 ## Main software
 
-R 4.5.0, Python 3, BayesPrism (InstaPrism), tensorQTL, PLINK 1.9, SMR 1.3.1, coloc 5.2.3, MAGMA 1.10, scGWAS, CellChat, limma, Seurat 4.3.0 and clusterProfiler 4.16.0.
+R 4.5.0, Python 3, BayesPrism 2.1.2 (InstaPrism 0.1.6), tensorQTL, PLINK 1.9, SMR 1.3.1, coloc 5.2.3, MAGMA 1.10, scGWAS, CellChat, limma, Seurat 5.4.0 and clusterProfiler 4.16.0.
 
 ## Data sources
 
